@@ -9,4 +9,4 @@ router = APIRouter(prefix='/students', tags=['Работа со студента
 
 @router.get("/", summary="Получить всех студентов", response_model=List[SStudent])
 async def get_all_students():
-    return await StudentDAO.find_all_students()
+    return await StudentDAO.find_all()
