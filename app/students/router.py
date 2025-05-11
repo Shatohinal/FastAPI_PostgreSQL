@@ -14,7 +14,7 @@ async def get_all_students(request_body: RBStudent = Depends()) -> list[SStudent
 
 @router.get("/{id}", summary="Получить одного студента по id")
 async def get_student_by_id(student_id: int) -> SStudent | dict:
-    result = await StudentDAO.find_one_or_none_by_id(student_id)
+    result = await StudentDAO.find_full_data(student_id)
     if result is None:
         return {'message': f'Студент с ID {student_id} не найден!'}
     return result
