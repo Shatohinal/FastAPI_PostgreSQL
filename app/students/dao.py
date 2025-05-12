@@ -1,5 +1,5 @@
 from app.dao.base import BaseDAO
-from app.students.models import Student, Major
+from app.students.models import Student
 from app.database import async_session_maker
 
 from sqlalchemy.orm import joinedload

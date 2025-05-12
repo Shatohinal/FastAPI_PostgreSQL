@@ -1,5 +1,7 @@
-from datetime import datetime, date
-from typing import Optional
-import re
-from pydantic import BaseModel, ConfigDict, Field, EmailStr, field_validator
+from pydantic import BaseModel, Field
 
+
+class SMajorsAdd(BaseModel):
+    major_name: str = Field(..., description="Название факультета")
+    major_description: str = Field(None, description="Описание факультета")
+    count_students: int = Field(0, description="Количество студентов")
