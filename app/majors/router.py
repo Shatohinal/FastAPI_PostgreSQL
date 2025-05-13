@@ -6,7 +6,7 @@ from app.majors.schemas import SMajorsAdd, SMajorsUpdDesc
 router = APIRouter(prefix='/majors', tags=['Работа с факультетами'])
 
 
-@router.post("/add/")
+@router.post("/add/", summary="Добавить факультет")
 async def register_user(major: SMajorsAdd) -> dict:
     check = await MajorsDAO.add(**major.model_dump())
     if check:
@@ -14,7 +14,7 @@ async def register_user(major: SMajorsAdd) -> dict:
     else:
         return {"message": "Ошибка при добавлении факультета!"}
 
-@router.put("/update_description/")
+@router.put("/update_description/", summary="Изменить описание факультета")
 async def update_major_description(major: SMajorsUpdDesc) -> dict:
     check = await MajorsDAO.update(filter_by={'major_name': major.major_name},
                                    major_description=major.major_description)
@@ -23,7 +23,7 @@ async def update_major_description(major: SMajorsUpdDesc) -> dict:
     else:
         return {"message": "Ошибка при обновлении описания факультета!"}
 
-@router.delete("/delete/{major_id}")
+@router.delete("/delete/{major_id}", summary="Удалить факультет по id")
 async def delete_major(major_id: int) -> dict:
     check = await MajorsDAO.delete(id=major_id)
     if check:

@@ -1,4 +1,5 @@
 from fastapi import FastAPI
+import uvicorn
 from app.students.router import router as router_students
 from app.majors.router import router as router_majors
 

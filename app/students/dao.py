@@ -8,12 +8,13 @@ from sqlalchemy.future import select
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy import insert, update, event, delete
 
-class StudentDAO(BaseDAO):
+class StudentDAO(BaseDAO[Student]):
+
     model = Student
 
     @classmethod
     @connection
-    async def find_full_data(cls, student_id: int, session: AsyncSession):
+    async def find_full_data(cls, student_id: int, session: AsyncSession) -> Student:
 
         # Запрос для получения информации о студенте вместе с информацией о факультете
         query = select(cls.model).options(joinedload(cls.model.major)).filter_by(id=student_id)
@@ -23,7 +24,7 @@ class StudentDAO(BaseDAO):
         # Если студент не найден, возвращаем None
         if not student_info:
             return None
-
+        
         student_data = student_info.to_dict()
         student_data['major'] = student_info.major.major_name
         return student_data
@@ -31,7 +32,7 @@ class StudentDAO(BaseDAO):
 
     @classmethod
     @connection
-    async def add_student(cls, student_data: dict, session: AsyncSession):
+    async def add_student(cls, student_data: dict, session: AsyncSession) -> int:
         new_student = Student(**student_data)
         session.add(new_student)
         await session.flush()
@@ -41,7 +42,7 @@ class StudentDAO(BaseDAO):
                 
     @classmethod
     @connection
-    async def delete_student_by_id(cls, student_id: int, session: AsyncSession):
+    async def delete_student_by_id(cls, student_id: int, session: AsyncSession) -> int|None:
 
         query = select(cls.model).filter_by(id=student_id)
         result = await session.execute(query)

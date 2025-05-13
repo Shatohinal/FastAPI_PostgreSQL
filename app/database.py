@@ -43,7 +43,9 @@ def connection(method):
             async with this_session.begin():
                 try:
                     # Явно не открываем транзакции, так как они уже есть в контексте
-                    return await method(session=this_session, *args, **kwargs)
+                    result = await method(*args, session=this_session, **kwargs)
+#                    print("from wrapper:", result)
+                    return result
                 except Exception as e:
                     await this_session.rollback()  # Откатываем сессию при ошибке
                     raise e  # Поднимаем исключение дальше

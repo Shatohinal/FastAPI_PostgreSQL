@@ -20,7 +20,7 @@ class Student(Base):
     major_id: Mapped[int] = mapped_column(ForeignKey("majors.id"), nullable=False)
 
     # Определяем отношения: один студент имеет один факультет
-    major: Mapped["Major"] = relationship("Major", back_populates="students")
+    major: Mapped["Major"] = relationship("Major", back_populates="students", lazy = 'noload')
 
     def __str__(self):
         return (f"{self.__class__.__name__}(id={self.id}, "
