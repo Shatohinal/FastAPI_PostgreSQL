@@ -39,14 +39,15 @@ class Base(AsyncAttrs, DeclarativeBase):
 
 def connection(method):
     async def wrapper(*args, **kwargs):
-        async with async_session_maker() as session:
-            try:
-                # Явно не открываем транзакции, так как они уже есть в контексте
-                return await method(*args, session=session, **kwargs)
-            except Exception as e:
-                await session.rollback()  # Откатываем сессию при ошибке
-                raise e  # Поднимаем исключение дальше
-            finally:
-                await session.close()  # Закрываем сессию
+        async with async_session_maker() as this_session:
+            async with this_session.begin():
+                try:
+                    # Явно не открываем транзакции, так как они уже есть в контексте
+                    return await method(session=this_session, *args, **kwargs)
+                except Exception as e:
+                    await this_session.rollback()  # Откатываем сессию при ошибке
+                    raise e  # Поднимаем исключение дальше
+                finally:
+                    await this_session.close()  # Закрываем сессию
 
     return wrapper
