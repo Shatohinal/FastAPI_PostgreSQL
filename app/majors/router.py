@@ -13,3 +13,4 @@ async def register_user(major: SMajorsAdd) -> dict:
         return {"message": "Факультет успешно добавлен!", "major": major}
     else:
         return {"message": "Ошибка при добавлении факультета!"}
+    
